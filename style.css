@@ -1,0 +1,45 @@
+/* 3 - External CSS file */
+body {
+    background-color: powderblue;
+  }
+  h1 {
+    color: #ae00ff;
+  }
+  h2 {
+    color: red;
+  }
+
+
+  hr {
+    background-color: #ae00ff; 
+    width: 100%;
+    height:10px; }
+
+/* 4 - Use the class selector */
+    .picture {
+      border: 5px solid black;
+      margin: 10px;
+  }
+
+/* 5 - Use an id selector */
+  #test{
+    color: blueviolet;
+    font-size: 40px;
+    text-align: center;
+  }
+
+/* 6 - two different class styles */
+  .class1 {
+    font-weight: bold;
+    font-size: 40px;
+}
+  .class2 {
+    color: rgb(255, 0, 187);
+    text-decoration: underline
+}
+
+/* 7 - add 6 images with rounded corners */
+  .border {
+    border-radius: 50px solid black;
+    margin: 20px;
+}
