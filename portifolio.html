@@ -1,59 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <section id="top">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portifolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="background-color:powderblue;">
-    <h1>My Work</h1><br>
+    <hr>
+    <!-- 1 - Inline CSS -->
+    <p style="color: rgb(61, 4, 76); font-size: 80px; text-align: center;">Portifolio</p>
+    <hr>
 
     <!-- 5 - Use an id selector -->
-    <p id="test">Este é um exemplo de ID</p>
+    <p id="test">Work in Paint</p>
+    <hr id="line">
 
     <img src="Images/arte1.jpg" class="picture" alt="arte1" width="400" height="400">
-    2011
+    <p class="textCenter">2011</p>
     <br>
-    <img src="Images/arte2.jpg" class="picture" alt="arte2">
-    2011
+    <img src="Images/arte2.jpg" class="picture" alt="arte2" height="300">
+    <p class="textCenter">2011</p>
     <br>
     <img src="Images/arte3.jpg" class="picture" alt="arte3" width="400" height="400">
-    2011
+    <p class="textCenter">2011</p>
     <br>
     
-    <p id="test"> Este é um exemplo de tabela dos meus feitos no GIMP</p>
+    <p id="test">Work in Gimp</p>
+    <hr id="line">
+    <br>
     <table>
         <tr>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">
+                <img class="border" src="Images/gimp1.png" alt="gimp 1" width="100">
             </td>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">
+                <img class="border" src="Images/gimp2.gif" alt="gimp 2" width="100">
             </td>
         </tr>
         <tr>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">
+                <img class="border" src="Images/gimp3.png" alt="gimp 3" width="100">
             </td>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">   
+                <img class="border" src="Images/gimp4.png" alt="gimp 4" width="100">   
             </td>
         </tr>
         <tr>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">
+                <img class="border" src="Images/gimp5.png" alt="gimp 5" width="100">
             </td>
             <td>
-                <img class="border" src="Images/gimp1.png" alt="Image 1" width="100">    
+                <img class="border" src="Images/gimp6.png" alt="gimp 6" width="100">    
             </td>
         </tr>
-    </table>
+    </table><br><br><br>
+
+    <p id="test">Work in Canvas</p>
+    <hr id="line">
+    <br>
+    <img class="picture" src="Images/halloween.jpeg" alt="Canvas" width="400">
+    <p class="textCenter">Spook Paint Night - Shark Tank</p>
 
     <br>
     <br>
     <br>
     <br>
+    <i><a href="#top">Back to top</a></i>
     <br>
     <br>
     <i><a href="index.html">Home Page</a></i>
@@ -112,7 +126,7 @@
     <br>
     <br>
     
-    <h6> My best work</h6>
+    <h6 class="textCenter"> My best work</h6>
     <img src="Images/bebe.jpg" class="picture" alt="bebe">
 
 </body>

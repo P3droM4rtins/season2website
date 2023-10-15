@@ -19,6 +19,9 @@ body {
     .picture {
       border: 5px solid black;
       margin: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
   }
 
 /* 5 - Use an id selector */
@@ -27,19 +30,44 @@ body {
     font-size: 40px;
     text-align: center;
   }
+  #line{
+    background-color: #ae00ff; 
+    width: 40%;
+    height:10px;
+  }
 
 /* 6 - two different class styles */
   .class1 {
     font-weight: bold;
-    font-size: 40px;
+    font-size: 30px;
 }
   .class2 {
     color: rgb(255, 0, 187);
-    text-decoration: underline
+  
 }
 
 /* 7 - add 6 images with rounded corners */
   .border {
-    border-radius: 50px solid black;
-    margin: 20px;
+    border-radius: 37px;
+    width: 250px;
+    border-color: black;
+
+}
+table, th, td {
+  margin-left: auto;
+  margin-right: auto;
+  border: 5px solid black;
+}
+tr:hover {
+  background-color: rgb(85, 9, 92);
+}
+.textCenter{
+  text-align: center;
+  font-weight: bold;
+}
+.personal{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.external{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
