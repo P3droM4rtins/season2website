@@ -1,0 +1,208 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title> B - B - G </title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var config = { 
+    type: Phaser.AUTO, //contexto de renderização
+    width: 800, //o tamanho do canvas
+    height: 600, // Tamanho do canvas
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 }, // atribui gravidade
+            debug: true // atribui visualmente blocos de colisão de cada sprite
+        }
+    },
+    scene: { //Como o phaser organiza diferentes partes do jogo
+        preload: preload,
+        create: create,
+        update: update
+    }
+    };
+
+    //Varias Variaveis
+    var player;
+    var platforms;
+    var cursors;
+    var gameOver = false;
+    var score = 0; // Guarda a pontuação
+    var scoreText; // Exibe a pontuação
+    var endText = "END GAME";
+
+    var game = new Phaser.Game(config); //este objeto configura o jogo no phaser
+
+    function preload () //Carrega assets, procura e carrega automaticamente tudo que foi definido
+    {
+        this.load.image('sky', 'assets/sky.jpeg'); //sky, ground, start, bomb e dude são conhecidos como chave do asset, essa string é um link para o asset
+        this.load.image('ground', 'assets/platform.png');
+        this.load.image('star', 'assets/star.png');
+        this.load.image('bomb', 'assets/bomb.png');
+        this.load.spritesheet('dude', 'assets/dude.png',{ frameWidth: 32, frameHeight: 48 });
+    }
+
+    
+    function create () // Certifique-se de colocar os sprites na ordem correta, não sobrepondo de forma errada o fundo
+    {
+        this.add.image(400, 300, 'sky').setScale(1.5); //exibe uma das imagens criadas, 400 e 300 são coordenadas x e y da imagem
+        //this.add.image(0, 0, 'sky').setOrigin(0, 0) //também pode ser usado
+        //this.add.image cria um novo game object de imagem adicionando-o a lista de exibição Scene
+        
+        platforms = this.physics.add.staticGroup(); // distema de Arcade Physics - dois tipos de corpos Dinâmico (velocidade e aceleração) 
+                                                    //  e Estático (posição e tamanho)
+
+        platforms.create(400, 568, 'ground').setScale(2).refreshBody(); //setScale = alterar resolução   refreshBody = corpo físico estático
+
+        platforms.create(600, 400, 'ground');
+        platforms.create(50, 250, 'ground');
+        platforms.create(750, 220, 'ground');
+    
+    player = this.physics.add.sprite(100, 340, 'dude').setScale(2.5);
+    
+
+     //nesta parte do código gera o player e determina sua posição
+
+    player.setBounce(0.2);
+    player.setCollideWorldBounds(true);
+
+    this.anims.create({ // Area reservada para determinar quais sprites serão usados durante animação de teclas pressionadas
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+    });
+
+    this.anims.create({
+    key: 'turn',
+    frames: [ { key: 'dude', frame: 4 } ],
+    frameRate: 20
+    });
+
+    this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+    });
+
+
+    cursors = this.input.keyboard.createCursorKeys(); // Preenche objeto de cursores: up, down, left, right 
+
+    stars = this.physics.add.group({ // Novo grupo criado chamado stars
+        key: 'star', //Aqui chamamos a sprite da star(textura - todos os filhos criados receberão a mesma textura padrão)
+        repeat: 13, // Alteração de quantidade de estrelas, número de vezes que serão replicadas
+        setXY: { x: 12, y: 0, stepX: 59 }, // Define a posição dos filhos e aumenta em 59 cada vez que o filho é gerado
+        setScale: {x: 1.5, y: 1.5}
+    });
+
+    stars.children.iterate(function (child) {
+
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)); // irá gerar de forma aleatória até que todas as estrelas se acomodem
+
+    });
+
+    bombs = this.physics.add.group();
+
+    scoreText = this.add.text(50, 50, 'score: 0', { fontSize: '32px', fill: '#ffffff', fontWeight: 'bold' });
+    
+
+    this.physics.add.collider(player, platforms); // Permite que o jogador colida com as plataformas
+    this.physics.add.collider(stars, platforms); // permite que as estrelas colidam com as plataformas
+    this.physics.add.collider(bombs, platforms); // Permite que as bombas colidam com as plataformas
+
+    this.physics.add.overlap(player, stars, collectStar, null, this); // Sobrepoe o jogador a estrela
+
+    this.physics.add.collider(player, bombs, hitBomb, null, this); // Sobrepoe o jogador a bomba
+}
+
+function update () //Chamando as funções de comando no loop UPDATE
+{
+   
+    if (cursors.left.isDown) // Checa se a tela esquerda está pressionada
+    {
+        player.setVelocityX(-260); //Caso confirmada que a tecla está pressionada aplica-se velocidade e inicia a animação
+
+        player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(260);
+
+        player.anims.play('right', true);
+    }
+    else
+    {
+        player.setVelocityX(0); //Ocorre quando não está sendo pressionada nenhuma tecla
+
+        player.anims.play('turn');
+    }
+
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.setVelocityY(-330); //Números negativos significam para cima, e positivos para baixo
+    }
+}
+function collectStar (player, star) //remove a exibição do objeto com a estrela colide com o player
+{
+    star.disableBody(true, true);
+
+    score += 10; //10 pontos serão adicionados a variavel score toda vez que colidir com uma estrela
+    scoreText.setText('Score: ' + score); // Exibe no canva a pontução
+
+    if (stars.countActive(true) === 0)
+    {
+        stars.children.iterate(function (child) {
+
+            child.enableBody(true, child.x, 0, true, true);
+
+        });
+
+        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+        var bomb = bombs.create(x, 16, 'bomb').setScale(2.5);
+        bomb.setBounce(1);
+        bomb.setCollideWorldBounds(true);
+        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+        bomb.allowGravity = false;
+    }
+}
+
+function hitBomb (player, bomb)
+{
+    this.physics.pause();
+
+    player.setTint(0xff0000);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+    player.anims.play('turn');
+
+    gameOver = true;
+
+    endText = this.add.text(230, 290, 'END GAME', { fontSize: '62px', fill: '#ffffff' });  //Mensagem de fim de jogo
+}
+
+</script>
+
+</body>
+</html>
+
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
+<!-- -->
